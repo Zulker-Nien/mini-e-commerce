@@ -6,7 +6,7 @@ import StoreNavigation from "../Products/StoreNavigation";
 import { Transition } from "@headlessui/react";
 import { CategoryData } from "@/app/Data/Data";
 import Link from "next/link";
-import CartDropdown from "./CartDropdown";
+import CartSlider from "./CartSlider";
 type CartItems = {
   id: number;
   title: string;
@@ -125,7 +125,7 @@ const Navbar = (props: NavbarProps) => {
                 <span className="sr-only">items in cart, view bag</span>
               </button>
               {cartOpen && (
-                <CartDropdown
+                <CartSlider
                   cartItems={props.cartItems}
                   handleCartClose={handleCartClose}
                 />

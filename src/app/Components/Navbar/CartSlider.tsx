@@ -16,7 +16,7 @@ type CartProps = {
   cartItems: CartItems | CartItems[];
   handleCartClose: () => void;
 };
-const CartDropdown = (props: CartProps) => {
+const CartSlider = (props: CartProps) => {
   const keys = props.cartItems;
   return (
     <div
@@ -178,4 +178,4 @@ const CartDropdown = (props: CartProps) => {
   );
 };
 
-export default CartDropdown;
+export default CartSlider;
