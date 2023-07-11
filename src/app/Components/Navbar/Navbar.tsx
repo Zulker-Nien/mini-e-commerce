@@ -2,36 +2,36 @@ import Image from "next/image";
 import ToggleButton from "../Mobile/ToggleButton";
 
 import { useEffect, useMemo, useState } from "react";
-import StoreNavigation from "../Header/StoreNavigation";
+import StoreNavigation from "../Products/StoreNavigation";
 import { Transition } from "@headlessui/react";
 import { CategoryData } from "@/app/Data/Data";
 import Link from "next/link";
+import CartDropdown from "./CartDropdown";
+type CartItems = {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
+  rating: {
+    rate: number;
+    count: number;
+  };
+};
 type NavbarProps = {
   handleMenuOpen: () => void;
   handleActiveCategory: (arg0: string) => void;
   menuIsActive: boolean;
   categoryData: string[];
+  cartItems: CartItems | CartItems[];
 };
 
 const Navbar = (props: NavbarProps) => {
-  // const [categoryIsActive, setCategoryIsActive] = useState<string>();
-  // const [categoryItems, setCategoryItems] = useState<Object[]>([]);
-
-  // const getCategoryItems = useMemo(() => {
-  //   fetch(`https://fakestoreapi.com/products/category/${categoryIsActive}`)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setCategoryItems(data);
-  //       console.log(data);
-  //     });
-  // }, [categoryIsActive]);
-
-  // useEffect(() => {
-  //   getCategoryItems;
-  // });
-
-  // if (!props.categoryData) return <p>No profile data</p>;
-
+  const [cartOpen, setCartOpen] = useState(false);
+  const handleCartClose = () => {
+    setCartOpen(false);
+  };
   return (
     <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="border-b border-gray-200">
@@ -39,7 +39,7 @@ const Navbar = (props: NavbarProps) => {
           <ToggleButton handleMenuOpen={props.handleMenuOpen} />
           {/* <!-- Logo --> */}
           <div className="ml-4 flex lg:ml-0">
-            <Link href="/landing">
+            <button onClick={() => props.handleActiveCategory("")}>
               <span className="sr-only">Your Company</span>
               <Image
                 width={400}
@@ -48,7 +48,7 @@ const Navbar = (props: NavbarProps) => {
                 src="/next.svg"
                 alt=""
               />
-            </Link>
+            </button>
           </div>
 
           {/* <!-- Flyout menus --> */}
@@ -77,22 +77,6 @@ const Navbar = (props: NavbarProps) => {
           {/* )} */}
 
           <div className="ml-auto flex items-center">
-            <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-              <a
-                href="#"
-                className="text-sm font-medium text-gray-700 hover:text-gray-800"
-              >
-                Sign in
-              </a>
-              <span className="h-6 w-px bg-gray-200" aria-hidden="true"></span>
-              <a
-                href="#"
-                className="text-sm font-medium text-gray-700 hover:text-gray-800"
-              >
-                Create account
-              </a>
-            </div>
-
             {/* <!-- Search --> */}
             <div className="flex lg:ml-6">
               <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
@@ -113,10 +97,14 @@ const Navbar = (props: NavbarProps) => {
                 </svg>
               </a>
             </div>
-
             {/* <!-- Cart --> */}
-            <div className="ml-4 flow-root lg:ml-6">
-              <a href="#" className="group -m-2 flex items-center p-2">
+            <div className="ml-4 flow-root lg:ml-6 z-20">
+              <button
+                onClick={() => {
+                  setCartOpen(!cartOpen);
+                }}
+                className="group -m-2 flex items-center p-2 cursor-pointer"
+              >
                 <svg
                   className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                   fill="none"
@@ -135,7 +123,13 @@ const Navbar = (props: NavbarProps) => {
                   0
                 </span>
                 <span className="sr-only">items in cart, view bag</span>
-              </a>
+              </button>
+              {cartOpen && (
+                <CartDropdown
+                  cartItems={props.cartItems}
+                  handleCartClose={handleCartClose}
+                />
+              )}
             </div>
           </div>
         </div>

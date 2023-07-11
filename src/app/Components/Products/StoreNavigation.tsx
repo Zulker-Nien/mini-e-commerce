@@ -15,6 +15,8 @@ type CategoryItems = {
 
 type StoreProps = {
   categoryItems: CategoryItems[];
+  handleProductClicked: (arg0: number) => void;
+  handleProductClose: () => void;
 };
 
 const StoreNavigation = (props: StoreProps) => {
@@ -24,10 +26,12 @@ const StoreNavigation = (props: StoreProps) => {
         <div className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-x-10 xl:gap-y-10 xl:h-full">
           {props.categoryItems.map((item, index) => {
             return (
-              <a
-                href="#"
-                className="group border flex flex-col text-center justify-center items-center"
+              <div
+                className="group border flex flex-col text-center justify-center items-center cursor-pointer"
                 key={index}
+                onClick={() => {
+                  props.handleProductClicked(item.id);
+                }}
               >
                 <div
                   className=" aspect-h-1 aspect-w-1 w-fit h-full min-w-60 overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 "
@@ -36,8 +40,6 @@ const StoreNavigation = (props: StoreProps) => {
                   <Image
                     width={100}
                     height={100}
-                    objectFit="cover"
-                    objectPosition="center"
                     src={item.image}
                     alt={item.title}
                     className="h-full w-full object-cover object-center group-hover:opacity-75 items-center justify-center"
@@ -47,7 +49,7 @@ const StoreNavigation = (props: StoreProps) => {
                 <p className="mt-1 text-lg font-medium text-gray-900">
                   $ {item.price}
                 </p>
-              </a>
+              </div>
             );
           })}
         </div>
