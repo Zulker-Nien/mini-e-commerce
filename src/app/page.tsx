@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Navbar from "./Components/Navbar/Navbar";
 import { Transition } from "@headlessui/react";
 import StoreNavigation from "./Components/Products/StoreNavigation";
-import Landing from "./Components/Header/Landing";
+import Landing from "./Components/Landing/Landing";
 import Product from "./Components/Products/Product";
 
 export type CategoryProps = {
@@ -33,8 +33,8 @@ export default function Home() {
   const [productData, setProductData] = useState<number>();
   const [productItems, setProductItems] = useState<CategoryProps | null>(null);
 
-  // const [cartData, setCartData] = useState<string[]>([]);
   const [cartItems, setCartItems] = useState<CategoryProps[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleMenuOpen = () => {
     setMenuIsActive(true);
@@ -69,7 +69,7 @@ export default function Home() {
             ? {
                 ...cartItem,
                 quantity: cartItem.quantity + 1,
-                totalPrice: cartItem.totalPrice + cartItem.price,
+                totalPrice: +(cartItem.totalPrice + cartItem.price).toFixed(2),
               }
             : cartItem
         );
@@ -110,7 +110,12 @@ export default function Home() {
     }
   };
 
+  const subtotal = useMemo(() => {
+    return cartItems.reduce((total, item) => total + item.totalPrice, 0);
+  }, [cartItems]);
+
   useEffect(() => {
+    setIsLoading(true);
     fetch("https://fakestoreapi.com/products/categories")
       .then((res) => {
         if (!res.ok) {
@@ -121,14 +126,17 @@ export default function Home() {
       .then((data) => {
         setCategoryData(data);
         console.log(data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
+        setIsLoading(false);
       });
   }, []);
 
   useEffect(() => {
     if (categoryIsActive) {
+      setIsLoading(true);
       fetch(`https://fakestoreapi.com/products/category/${categoryIsActive}`)
         .then((res) => {
           if (!res.ok) {
@@ -139,15 +147,18 @@ export default function Home() {
         .then((data) => {
           setCategoryItems(data);
           console.log(data);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error(error);
+          setIsLoading(false);
         });
     }
   }, [categoryIsActive]);
 
   useEffect(() => {
     if (productData) {
+      setIsLoading(true);
       fetch(`https://fakestoreapi.com/products/${productData}`)
         .then((res) => {
           if (!res.ok) {
@@ -159,9 +170,11 @@ export default function Home() {
           setProductItems(data);
           setProductIsActive(true);
           console.log(data);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error(error);
+          setIsLoading(false);
         });
     }
   }, [productData]);
@@ -170,9 +183,6 @@ export default function Home() {
     <>
       <div className="bg-black">
         <header className="relative bg-black">
-          <p className="flex h-10 items-center justify-center bg-pink px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-            Welcome to shopping.
-          </p>
           <Navbar
             handleMenuOpen={handleMenuOpen}
             menuIsActive={menuIsActive}
@@ -180,8 +190,13 @@ export default function Home() {
             handleActiveCategory={handleActiveCategory}
             cartItems={cartItems}
             handleRemoveCartItem={handleRemoveCartItem}
+            subtotal={subtotal}
           />
-          {categoryIsActive ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center h-screen">
+              <p>Loading...</p>
+            </div>
+          ) : categoryIsActive ? (
             <StoreNavigation
               categoryItems={categoryItems}
               handleProductClicked={handleProductClicked}
@@ -203,6 +218,9 @@ export default function Home() {
             />
           )}
         </header>
+      </div>
+      <div className=" h-[10vh]  bg-black flex justify-center items-center">
+        <h1 className="text-white">Developed by Zulker Nien</h1>
       </div>
     </>
   );

@@ -1,11 +1,7 @@
 import Image from "next/image";
 import ToggleButton from "../Mobile/ToggleButton";
 import { CategoryProps } from "@/app/page";
-import { useEffect, useMemo, useState } from "react";
-import StoreNavigation from "../Products/StoreNavigation";
-import { Transition } from "@headlessui/react";
-import { CategoryData } from "@/app/Data/Data";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import CartSlider from "./CartSlider";
 
 type NavbarProps = {
@@ -15,6 +11,7 @@ type NavbarProps = {
   categoryData: string[];
   cartItems: CategoryProps | CategoryProps[];
   handleRemoveCartItem: (arg0: number) => void;
+  subtotal: number;
 };
 
 const Navbar = (props: NavbarProps) => {
@@ -27,10 +24,9 @@ const Navbar = (props: NavbarProps) => {
       <div className="border-b border-gray-200">
         <div className="flex h-16 items-center">
           <ToggleButton handleMenuOpen={props.handleMenuOpen} />
-          {/* <!-- Logo --> */}
           <div className="ml-4 flex lg:ml-0">
             <button onClick={() => props.handleActiveCategory("")}>
-              <span className="sr-only">Your Company</span>
+              <span className="sr-only text-white">Your Company</span>
               <Image
                 width={400}
                 height={400}
@@ -41,7 +37,6 @@ const Navbar = (props: NavbarProps) => {
             </button>
           </div>
 
-          {/* <!-- Flyout menus --> */}
           <div className="hidden lg:ml-8 lg:block lg:self-stretch">
             <div className="flex h-full space-x-8">
               {props.categoryData &&
@@ -67,27 +62,6 @@ const Navbar = (props: NavbarProps) => {
           {/* )} */}
 
           <div className="ml-auto flex items-center">
-            {/* <!-- Search --> */}
-            <div className="flex lg:ml-6">
-              <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
-                <span className="sr-only">Search</span>
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                  />
-                </svg>
-              </a>
-            </div>
-            {/* <!-- Cart --> */}
             <div className="ml-4 flow-root lg:ml-6 z-20">
               <button
                 onClick={() => {
@@ -121,6 +95,7 @@ const Navbar = (props: NavbarProps) => {
                   cartItems={props.cartItems}
                   handleCartClose={handleCartClose}
                   handleRemoveCartItem={props.handleRemoveCartItem}
+                  subtotal={props.subtotal}
                 />
               )}
             </div>

@@ -116,6 +116,9 @@ const Product: React.FC<ProductProps> = (props) => {
                         <p className="text-2xl text-gray-900">
                           $ {props.productItems?.price}
                         </p>
+                        <p className="text-l text-gray-900">
+                          {props.productItems?.description}
+                        </p>
 
                         <div className="mt-6">
                           <h4 className="sr-only">Reviews</h4>

@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { CategoryProps } from "@/app/page";
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 
 type CartProps = {
   cartItems: CategoryProps | CategoryProps[];
   handleCartClose: () => void;
   handleRemoveCartItem: (arg0: number) => void;
+  subtotal: number;
 };
 const CartSlider = (props: CartProps) => {
   const [cartItems, setCartItems] = useState<CategoryProps[]>(
@@ -14,10 +15,11 @@ const CartSlider = (props: CartProps) => {
 
   return (
     <div
-      className="relative z-10"
+      className="relative z-10 "
       aria-labelledby="slide-over-title"
       role="dialog"
       aria-modal="true"
+      data-aos="fade-left"
     >
       {/* <!--
       Background backdrop, show/hide based on slide-over state.
@@ -131,7 +133,7 @@ const CartSlider = (props: CartProps) => {
                                         type="button"
                                         className="font-medium text-indigo-600 hover:text-indigo-500"
                                       >
-                                        Remove
+                                        Remove quantity
                                       </button>
                                     </div>
                                   </div>
@@ -147,7 +149,7 @@ const CartSlider = (props: CartProps) => {
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                   <div className="flex justify-between text-base font-medium text-gray-900">
                     <p>Subtotal</p>
-                    <p>$262.00</p>
+                    <p>${props.subtotal}</p>
                   </div>
                   <p className="mt-0.5 text-sm text-gray-500">
                     Shipping and taxes calculated at checkout.
