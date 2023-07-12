@@ -30,7 +30,7 @@ const Navbar = (props: NavbarProps) => {
               <Image
                 width={400}
                 height={400}
-                className="h-8 w-auto"
+                className="h-16 w-auto"
                 src="/next.svg"
                 alt=""
               />

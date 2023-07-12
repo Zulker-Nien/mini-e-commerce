@@ -50,7 +50,7 @@ const StoreNavigation = (props: StoreProps) => {
                 e.target.value as "ascending" | "descending"
               )
             }
-            className="border border-gray-300 p-1 rounded-md"
+            className="border border-gray-300 p-1 rounded-md text-black"
           >
             <option value="ascending">Ascending</option>
             <option value="descending">Descending</option>
@@ -61,9 +61,11 @@ const StoreNavigation = (props: StoreProps) => {
           <select
             value={selectedCategory}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="border border-gray-300 p-1 rounded-md"
+            className="border border-gray-300 p-1 rounded-md text-black"
           >
-            <option value="">All</option>
+            <option value="" className="text-black">
+              All
+            </option>
             {uniqueCategories.map((category) => (
               <option key={category} value={category}>
                 {category}
