@@ -28,7 +28,6 @@ const productAnimationVariants = {
   },
 };
 const Landing = (props: LandingProps) => {
-  // const [productItems, setProductItems] = useState<ProductProps[]>([]);
   const [productData, setProductData] = useState<CategoryProps[]>([]);
   const getAllProducts = useMemo(() => {
     fetch("https://fakestoreapi.com/products")
