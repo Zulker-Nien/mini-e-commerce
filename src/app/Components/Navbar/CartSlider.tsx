@@ -1,17 +1,37 @@
 import Image from "next/image";
 import { CategoryProps } from "@/app/page";
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 type CartProps = {
   cartItems: CategoryProps | CategoryProps[];
   handleCartClose: () => void;
   handleRemoveCartItem: (arg0: number) => void;
   subtotal: number;
+  cartOpen: boolean;
 };
+const cartVariants = {
+  show: {
+    x: 0,
+    transition: {
+      ease: "easeOut",
+      duration: 0.3,
+    },
+  },
+  hide: {
+    x: 20,
+    transition: {
+      ease: "easeIn",
+      duration: 0.5,
+    },
+  },
+};
+
 const CartSlider = (props: CartProps) => {
   const [cartItems, setCartItems] = useState<CategoryProps[]>(
     Array.isArray(props.cartItems) ? props.cartItems : [props.cartItems]
   );
+
   return (
     <div
       className="relative z-10 "
@@ -20,13 +40,16 @@ const CartSlider = (props: CartProps) => {
       aria-modal="true"
       data-aos="fade-left"
     >
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-
-      <div className="fixed inset-0 overflow-hidden">
+      <div className="fixed inset-0 overflow-hidden ">
         <div className="absolute inset-0 overflow-hidden">
           <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
             <div className="pointer-events-auto w-screen max-w-md">
-              <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+              <motion.div
+                variants={cartVariants}
+                animate={props.cartOpen ? "show" : "hide"}
+                initial="hide"
+                className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl "
+              >
                 <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                   <div className="flex items-start justify-between">
                     <h2
@@ -142,7 +165,7 @@ const CartSlider = (props: CartProps) => {
                     </a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>

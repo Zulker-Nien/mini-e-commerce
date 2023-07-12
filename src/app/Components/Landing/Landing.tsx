@@ -2,14 +2,31 @@ import React, { useEffect, useMemo, useState } from "react";
 import StoreNavigation from "../Products/StoreNavigation";
 import ScrollLink from "./ScrollLink";
 import { CategoryProps } from "@/app/page";
-import Product from "../Products/Product";
+import { motion } from "framer-motion";
 
 type LandingProps = {
   handleProductClicked: (arg0: number) => void;
   handleProductClose: () => void;
   categoryIsActive: string;
 };
-
+const productAnimationVariants = {
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      ease: "easeOut",
+      duration: 0.3,
+    },
+  },
+  hide: {
+    y: -20,
+    opacity: 0.3,
+    transition: {
+      ease: "easeIn",
+      duration: 0.1,
+    },
+  },
+};
 const Landing = (props: LandingProps) => {
   // const [productItems, setProductItems] = useState<ProductProps[]>([]);
   const [productData, setProductData] = useState<CategoryProps[]>([]);
@@ -25,7 +42,12 @@ const Landing = (props: LandingProps) => {
     getAllProducts;
   }, [getAllProducts]);
   return (
-    <div className="relative isolate px-6 pt-14 lg:px-8">
+    <motion.div
+      className="relative isolate px-6 pt-14 lg:px-8"
+      variants={productAnimationVariants}
+      animate={"show"}
+      initial="hide"
+    >
       <div
         className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
         aria-hidden="true"
@@ -38,7 +60,7 @@ const Landing = (props: LandingProps) => {
           }}
         ></div>
       </div>
-      <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+      <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 h-[90vh]">
         <div className="hidden sm:mb-8 sm:flex sm:justify-center">
           <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-white-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
             Buy your favourite products online.
@@ -69,7 +91,7 @@ const Landing = (props: LandingProps) => {
           categoryIsActive={props.categoryIsActive}
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

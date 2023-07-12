@@ -2,6 +2,26 @@ import { useState } from "react";
 import Image from "next/image";
 import { CategoryProps } from "@/app/page";
 
+import { motion } from "framer-motion";
+const storeAnimationVariants = {
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      ease: "easeOut",
+      duration: 0.3,
+    },
+  },
+  hide: {
+    y: -20,
+    opacity: 0.3,
+    transition: {
+      ease: "easeIn",
+      duration: 0.1,
+    },
+  },
+};
+
 type StoreProps = {
   categoryItems: CategoryProps[];
   handleProductClicked: (arg0: number) => void;
@@ -10,12 +30,13 @@ type StoreProps = {
 };
 
 const StoreNavigation = (props: StoreProps) => {
-  const [filterOption, setFilterOption] = useState<"ascending" | "descending">(
-    "ascending"
-  );
+  const [triggerAnimation, setTriggerAnimation] = useState<boolean>(false);
+  const [filterOption, setFilterOption] = useState<
+    "Low to High" | "High to low"
+  >("Low to High");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-  const handleFilterOptionChange = (option: "ascending" | "descending") => {
+  const handleFilterOptionChange = (option: "Low to High" | "High to low") => {
     setFilterOption(option);
   };
 
@@ -32,7 +53,7 @@ const StoreNavigation = (props: StoreProps) => {
       (item) => selectedCategory === "" || item.category === selectedCategory
     )
     .sort((a, b) => {
-      if (filterOption === "ascending") {
+      if (filterOption === "Low to High") {
         return a.price - b.price;
       } else {
         return b.price - a.price;
@@ -40,29 +61,32 @@ const StoreNavigation = (props: StoreProps) => {
     });
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white  min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:x-8 ">
         <div className="flex justify-end mb-4">
-          <label className="mr-2 text-black">Sort by:</label>
+          <label className="mr-2 text-black">Sort by price:</label>
           <select
             value={filterOption}
             onChange={(e) =>
               handleFilterOptionChange(
-                e.target.value as "ascending" | "descending"
+                e.target.value as "Low to High" | "High to low"
               )
             }
             className="border border-gray-300 p-1 rounded-md text-black"
           >
-            <option value="ascending">Ascending</option>
-            <option value="descending">Descending</option>
+            <option value="Low to High">Low to High</option>
+            <option value="High to low">High to low</option>
           </select>
         </div>
         {props.categoryIsActive ? null : (
-          <div className="flex justify-end mb-4">
+          <div className="  flex justify-end mb-4">
             <label className="mr-2 text-black">Filter by Category:</label>
             <select
               value={selectedCategory}
-              onChange={(e) => handleCategoryChange(e.target.value)}
+              onChange={(e) => {
+                handleCategoryChange(e.target.value);
+                setTriggerAnimation(true);
+              }}
               className="border border-gray-300 p-1 rounded-md text-black"
             >
               <option value="" className="text-black">
@@ -76,7 +100,12 @@ const StoreNavigation = (props: StoreProps) => {
             </select>
           </div>
         )}
-        <div className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-x-10 xl:gap-y-10 xl:h-full">
+        <motion.div
+          variants={storeAnimationVariants}
+          animate={"show"}
+          initial="hide"
+          className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-x-10 xl:gap-y-10 xl:h-full"
+        >
           {filteredItems.map((item, index) => {
             return (
               <div
@@ -107,7 +136,7 @@ const StoreNavigation = (props: StoreProps) => {
               </div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

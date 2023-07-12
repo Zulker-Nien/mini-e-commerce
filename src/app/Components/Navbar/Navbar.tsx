@@ -1,7 +1,7 @@
 import Image from "next/image";
 import ToggleButton from "../Mobile/ToggleButton";
 import { CategoryProps } from "@/app/page";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CartSlider from "./CartSlider";
 
 type NavbarProps = {
@@ -12,27 +12,26 @@ type NavbarProps = {
   cartItems: CategoryProps | CategoryProps[];
   handleRemoveCartItem: (arg0: number) => void;
   subtotal: number;
+  handleCartOpen: () => void;
+  handleCartClose: () => void;
+  cartIsActive: boolean;
 };
 
 const Navbar = (props: NavbarProps) => {
-  const [cartOpen, setCartOpen] = useState(false);
-  const handleCartClose = () => {
-    setCartOpen(false);
-  };
   return (
-    <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <nav aria-label="Top" className="mx-auto max-w px-4 sm:px-6 lg:px-8">
       <div className="border-b border-gray-200">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-[10vh] items-center justify-around">
           <ToggleButton handleMenuOpen={props.handleMenuOpen} />
-          <div className=" flex lg:ml-0 bg-yellow">
+          <div className=" flex lg:ml-0 bg-indigo">
             <button
-              className=" justify-center apitalize border-transparent text-white hover:text-pink-700 relative z-10  flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out "
+              className=" justify-center capitalize border-transparent text-white relative z-10  flex items-center border-b-2 text-sm font-medium transition-colors duration-200 ease-out "
               onClick={() => props.handleActiveCategory("")}
             >
               <Image
-                width={500}
-                height={500}
-                className="h-16 w-auto"
+                width={100}
+                height={100}
+                className="h-24 w-auto hover:scale-125 ease-out duration-300"
                 src="/next.svg"
                 alt=""
               />
@@ -65,9 +64,7 @@ const Navbar = (props: NavbarProps) => {
           <div className=" flex items-center">
             <div className="ml-4 flow-root lg:ml-6 z-20">
               <button
-                onClick={() => {
-                  setCartOpen(!cartOpen);
-                }}
+                onClick={props.handleCartOpen}
                 className="group -m-2 flex items-center p-2 cursor-pointer"
               >
                 <svg
@@ -91,13 +88,16 @@ const Navbar = (props: NavbarProps) => {
                 </span>
                 <span className="sr-only">items in cart, view bag</span>
               </button>
-              {cartOpen && (
-                <CartSlider
-                  cartItems={props.cartItems}
-                  handleCartClose={handleCartClose}
-                  handleRemoveCartItem={props.handleRemoveCartItem}
-                  subtotal={props.subtotal}
-                />
+              {props.cartIsActive && (
+                <div>
+                  <CartSlider
+                    cartItems={props.cartItems}
+                    handleCartClose={props.handleCartClose}
+                    handleRemoveCartItem={props.handleRemoveCartItem}
+                    subtotal={props.subtotal}
+                    cartOpen={props.cartIsActive}
+                  />
+                </div>
               )}
             </div>
           </div>

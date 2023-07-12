@@ -35,6 +35,7 @@ export default function Home() {
   const [productItems, setProductItems] = useState<CategoryProps | null>(null);
 
   const [cartItems, setCartItems] = useState<CategoryProps[]>([]);
+  const [cartIsActive, setCartIsActive] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleMenuOpen = () => {
@@ -45,13 +46,39 @@ export default function Home() {
     setMenuIsActive(false);
   };
 
+  const handleCartClose = () => {
+    setCartIsActive(false);
+  };
+
+  const handleCartOpen = () => {
+    setCartIsActive(true);
+  };
+
   const handleActiveCategory = (item: string) => {
     setCategoryIsActive(item);
   };
 
   const handleProductClicked = (item: number) => {
-    setProductData(item);
-    setProductIsActive(true);
+    // setProductData(item);
+    // setProductIsActive(true);
+    fetch(`https://fakestoreapi.com/products/${item}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch product");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setProductItems(data);
+        setIsLoading(false);
+        setProductData(item);
+        setProductIsActive(true);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+        setIsLoading(false);
+      });
   };
 
   const handleProductClose = () => {
@@ -142,7 +169,6 @@ export default function Home() {
 
   useEffect(() => {
     if (categoryIsActive) {
-      setIsLoading(true);
       fetch(`https://fakestoreapi.com/products/category/${categoryIsActive}`)
         .then((res) => {
           if (!res.ok) {
@@ -153,18 +179,15 @@ export default function Home() {
         .then((data) => {
           setCategoryItems(data);
           console.log(data);
-          setIsLoading(false);
         })
         .catch((error) => {
           console.error(error);
-          setIsLoading(false);
         });
     }
   }, [categoryIsActive]);
 
   useEffect(() => {
     if (productData) {
-      setIsLoading(true);
       fetch(`https://fakestoreapi.com/products/${productData}`)
         .then((res) => {
           if (!res.ok) {
@@ -187,7 +210,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="bg-black">
+      <div className="">
         {menuIsActive && (
           <ToggleMenu
             handleMenuClose={handleMenuClose}
@@ -204,12 +227,16 @@ export default function Home() {
             cartItems={cartItems}
             handleRemoveCartItem={handleRemoveCartItem}
             subtotal={subtotal}
+            handleCartOpen={handleCartOpen}
+            handleCartClose={handleCartClose}
+            cartIsActive={cartIsActive}
           />
-          {isLoading ? (
-            <div className="flex justify-center items-center h-screen">
+          {isLoading && (
+            <div className="flex justify-center items-center h-screen bg-white text-black">
               <p>Loading...</p>
             </div>
-          ) : categoryIsActive ? (
+          )}
+          {categoryIsActive ? (
             <StoreNavigation
               categoryItems={categoryItems}
               handleProductClicked={handleProductClicked}
@@ -231,6 +258,7 @@ export default function Home() {
               handleProductClose={handleProductClose}
               handleCartItem={handleCartItem}
               cartItems={cartItems}
+              handleCartOpen={handleCartOpen}
             />
           )}
         </header>
