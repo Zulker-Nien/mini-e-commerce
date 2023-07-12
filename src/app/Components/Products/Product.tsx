@@ -88,12 +88,12 @@ const Product: React.FC<ProductProps> = (props) => {
         <div className="fixed inset-0 hidden bg-gray-500 bg-opacity-75 transition-opacity md:block"></div>
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex  min-h-full md:w-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
-            <div className="flex justify-center items-center xl:w-11/12 w-6/12 h-5/6  transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-full">
+            <div className="flex justify-center items-center  w-11/12 h-5/6  transform text-left text-base transition lg:w-6/12 md:my-8  md:px-4 lg:max-w-full">
               <motion.div
                 variants={productAnimationVariants}
                 animate={cacheProducts ? "show" : "hide"}
                 initial="hide"
-                className="relative bg-white flex w-full sm:w-screenitems-center overflow-hidden px-4 pb-8 pt-14  shadow-2xl sm:px-4 sm:pt-8 md:p-6 lg:p-8"
+                className="relative bg-white flex w-screen sm:w-screen items-center overflow-hidden px-4 pb-8 pt-14  shadow-2xl sm:px-4 sm:pt-8 md:p-6 lg:p-8"
               >
                 <button
                   onClick={props.handleProductClose}
