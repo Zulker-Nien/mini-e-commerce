@@ -2,7 +2,9 @@
 
 ### This project was done as an assessment: Time: 1 day 19 hours
 
-## The e-commerce I created is an SPA instead of using Link Pages. Given the short time, I went for the fastest way possible.
+### The e-commerce I created is a responsive Single Page Application (SPA) instead of using Link Pages.
+
+### Given the short time, I went for the fastest way possible.
 
 # Here is the demo: [Lengthy Vercel Link](https://mini-e-commerce-orcin.vercel.app/?vercelToolbarCode=GgfxeSfXuqxuPaJ)
 
