@@ -6,6 +6,7 @@ import { Transition } from "@headlessui/react";
 import StoreNavigation from "./Components/Products/StoreNavigation";
 import Landing from "./Components/Landing/Landing";
 import Product from "./Components/Products/Product";
+import ToggleMenu from "./Components/Mobile/ToggleMenu";
 
 export type CategoryProps = {
   id: number;
@@ -90,7 +91,9 @@ export default function Home() {
         .map((item: CategoryProps) => {
           if (item.id === itemId) {
             const updatedQuantity = item.quantity - 1;
-            const updatedTotalPrice = item.totalPrice - item.price;
+            const updatedTotalPrice = +(item.totalPrice - item.price).toFixed(
+              2
+            );
 
             if (updatedQuantity === 0) {
               return null;
@@ -111,7 +114,10 @@ export default function Home() {
   };
 
   const subtotal = useMemo(() => {
-    return cartItems.reduce((total, item) => total + item.totalPrice, 0);
+    return cartItems.reduce(
+      (total, item) => +(total + item.totalPrice).toFixed(2),
+      0
+    );
   }, [cartItems]);
 
   useEffect(() => {
@@ -182,6 +188,13 @@ export default function Home() {
   return (
     <>
       <div className="bg-black">
+        {menuIsActive && (
+          <ToggleMenu
+            handleMenuClose={handleMenuClose}
+            categoryData={categoryData}
+            handleActiveCategory={handleActiveCategory}
+          />
+        )}
         <header className="relative bg-black">
           <Navbar
             handleMenuOpen={handleMenuOpen}
@@ -201,12 +214,14 @@ export default function Home() {
               categoryItems={categoryItems}
               handleProductClicked={handleProductClicked}
               handleProductClose={handleProductClose}
+              categoryIsActive={categoryIsActive}
             />
           ) : (
             <>
               <Landing
                 handleProductClicked={handleProductClicked}
                 handleProductClose={handleProductClose}
+                categoryIsActive={categoryIsActive}
               />
             </>
           )}
@@ -215,6 +230,7 @@ export default function Home() {
               productItems={productItems}
               handleProductClose={handleProductClose}
               handleCartItem={handleCartItem}
+              cartItems={cartItems}
             />
           )}
         </header>

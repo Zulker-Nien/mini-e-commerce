@@ -7,6 +7,7 @@ import Product from "../Products/Product";
 type LandingProps = {
   handleProductClicked: (arg0: number) => void;
   handleProductClose: () => void;
+  categoryIsActive: string;
 };
 
 const Landing = (props: LandingProps) => {
@@ -65,6 +66,7 @@ const Landing = (props: LandingProps) => {
           categoryItems={productData}
           handleProductClicked={props.handleProductClicked}
           handleProductClose={props.handleProductClose}
+          categoryIsActive={props.categoryIsActive}
         />
       </div>
     </div>

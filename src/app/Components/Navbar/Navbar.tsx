@@ -22,14 +22,16 @@ const Navbar = (props: NavbarProps) => {
   return (
     <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="border-b border-gray-200">
-        <div className="flex h-16 items-center">
+        <div className="flex h-16 items-center justify-between">
           <ToggleButton handleMenuOpen={props.handleMenuOpen} />
-          <div className="ml-4 flex lg:ml-0">
-            <button onClick={() => props.handleActiveCategory("")}>
-              <span className="sr-only text-white">Your Company</span>
+          <div className=" flex lg:ml-0 bg-yellow">
+            <button
+              className=" justify-center apitalize border-transparent text-white hover:text-pink-700 relative z-10  flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out "
+              onClick={() => props.handleActiveCategory("")}
+            >
               <Image
-                width={400}
-                height={400}
+                width={500}
+                height={500}
                 className="h-16 w-auto"
                 src="/next.svg"
                 alt=""
@@ -46,7 +48,7 @@ const Navbar = (props: NavbarProps) => {
                       <div className="relative flex" key={index}>
                         <button
                           type="button"
-                          className="capitalize border-transparent text-pink-700 hover:text-white relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
+                          className="capitalize border-transparent text-white hover:text-pink-700 relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
                           aria-expanded="false"
                           key={index}
                           onClick={() => props.handleActiveCategory(item)}
@@ -59,9 +61,8 @@ const Navbar = (props: NavbarProps) => {
                 })}
             </div>
           </div>
-          {/* )} */}
 
-          <div className="ml-auto flex items-center">
+          <div className=" flex items-center">
             <div className="ml-4 flow-root lg:ml-6 z-20">
               <button
                 onClick={() => {

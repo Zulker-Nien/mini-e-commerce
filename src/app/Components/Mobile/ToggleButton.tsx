@@ -8,7 +8,7 @@ const ToggleButton = (props: ToggleProps) => {
   return (
     <button
       type="button"
-      className="rounded-md bg-white p-2 text-gray-400 lg:hidden"
+      className="rounded-md bg-white p-2 text-gray-400 lg:hidden z-20"
       onClick={props.handleMenuOpen}
     >
       <span className="sr-only">Open menu</span>
