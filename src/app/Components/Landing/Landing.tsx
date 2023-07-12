@@ -54,8 +54,11 @@ const Landing = (props: LandingProps) => {
       animate={"show"}
       initial="hide"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="w-11/12 lg:w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 justify-center">
+        <div
+          className="w-full h-[40vh] lg:h-[80vh] bg-opacity-10 lg:pb-4 lg:w-full bg-white rounded-lg
+          touch-none"
+        >
           <Suspense fallback={null}>
             <Canvas
               className="canvas "
