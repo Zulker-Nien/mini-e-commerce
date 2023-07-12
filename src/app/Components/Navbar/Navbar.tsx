@@ -1,30 +1,20 @@
 import Image from "next/image";
 import ToggleButton from "../Mobile/ToggleButton";
-
+import { CategoryProps } from "@/app/page";
 import { useEffect, useMemo, useState } from "react";
 import StoreNavigation from "../Products/StoreNavigation";
 import { Transition } from "@headlessui/react";
 import { CategoryData } from "@/app/Data/Data";
 import Link from "next/link";
 import CartSlider from "./CartSlider";
-type CartItems = {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-};
+
 type NavbarProps = {
   handleMenuOpen: () => void;
   handleActiveCategory: (arg0: string) => void;
   menuIsActive: boolean;
   categoryData: string[];
-  cartItems: CartItems | CartItems[];
+  cartItems: CategoryProps | CategoryProps[];
+  handleRemoveCartItem: (arg0: number) => void;
 };
 
 const Navbar = (props: NavbarProps) => {
@@ -120,7 +110,9 @@ const Navbar = (props: NavbarProps) => {
                   />
                 </svg>
                 <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                  0
+                  {Array.isArray(props.cartItems) &&
+                    props.cartItems &&
+                    props.cartItems.length}
                 </span>
                 <span className="sr-only">items in cart, view bag</span>
               </button>
@@ -128,6 +120,7 @@ const Navbar = (props: NavbarProps) => {
                 <CartSlider
                   cartItems={props.cartItems}
                   handleCartClose={handleCartClose}
+                  handleRemoveCartItem={props.handleRemoveCartItem}
                 />
               )}
             </div>

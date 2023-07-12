@@ -1,19 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import StoreNavigation from "../Products/StoreNavigation";
 import ScrollLink from "./ScrollLink";
+import { CategoryProps } from "@/app/page";
 import Product from "../Products/Product";
-type ProductProps = {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-};
+
 type LandingProps = {
   handleProductClicked: (arg0: number) => void;
   handleProductClose: () => void;
@@ -21,7 +11,7 @@ type LandingProps = {
 
 const Landing = (props: LandingProps) => {
   // const [productItems, setProductItems] = useState<ProductProps[]>([]);
-  const [productData, setProductData] = useState<ProductProps[]>([]);
+  const [productData, setProductData] = useState<CategoryProps[]>([]);
   const getAllProducts = useMemo(() => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())

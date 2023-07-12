@@ -1,23 +1,17 @@
 import Image from "next/image";
+import { CategoryProps } from "@/app/page";
 import React, { Fragment, useState } from "react";
-type CartItems = {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-};
+
 type CartProps = {
-  cartItems: CartItems | CartItems[];
+  cartItems: CategoryProps | CategoryProps[];
   handleCartClose: () => void;
+  handleRemoveCartItem: (arg0: number) => void;
 };
 const CartSlider = (props: CartProps) => {
-  const keys = props.cartItems;
+  const [cartItems, setCartItems] = useState<CategoryProps[]>(
+    Array.isArray(props.cartItems) ? props.cartItems : [props.cartItems]
+  );
+
   return (
     <div
       className="relative z-10"
@@ -71,13 +65,13 @@ const CartSlider = (props: CartProps) => {
                           className="h-6 w-6"
                           fill="none"
                           viewBox="0 0 24 24"
-                          stroke-width="1.5"
+                          strokeWidth="1.5"
                           stroke="currentColor"
                           aria-hidden="true"
                         >
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             d="M6 18L18 6M6 6l12 12"
                           />
                         </svg>
@@ -92,47 +86,57 @@ const CartSlider = (props: CartProps) => {
                         className="-my-6 divide-y divide-gray-200"
                       >
                         {Array.isArray(props.cartItems) &&
-                          props.cartItems.map((item, index) => {
+                          props.cartItems.map((item) => {
+                            const itemCount = cartItems.filter(
+                              (cartItem) => cartItem.id === item.id
+                            ).length;
+
                             return (
-                              <>
-                                <li className="flex py-6" key={index}>
-                                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                    <Image
-                                      width={100}
-                                      height={100}
-                                      src={item.image}
-                                      alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
-                                      className="h-full w-full object-cover object-center"
-                                    />
-                                  </div>
+                              <li className="flex py-6" key={item.id}>
+                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                  <Image
+                                    width={100}
+                                    height={100}
+                                    src={item.image}
+                                    alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
+                                    className="h-full w-full object-cover object-center"
+                                  />
+                                </div>
 
-                                  <div className="ml-4 flex flex-1 flex-col">
-                                    <div>
-                                      <div className="flex justify-between text-base font-medium text-gray-900">
-                                        <h3>
-                                          <a href="#">Throwback Hip Bag</a>
-                                        </h3>
-                                        <p className="ml-4">$90.00</p>
-                                      </div>
-                                      <p className="mt-1 text-sm text-gray-500">
-                                        Salmon
-                                      </p>
+                                <div
+                                  className="ml-4 flex flex-1 flex-col"
+                                  key={item.id}
+                                >
+                                  <div>
+                                    <div className="flex justify-between text-base font-medium text-gray-900">
+                                      <h3>
+                                        <a href="#">{item.title}</a>
+                                      </h3>
+                                      <p className="ml-4">${item.totalPrice}</p>
                                     </div>
-                                    <div className="flex flex-1 items-end justify-between text-sm">
-                                      <p className="text-gray-500">Qty 1</p>
+                                    <p className="mt-1 text-sm text-gray-500">
+                                      Salmon
+                                    </p>
+                                  </div>
+                                  <div className="flex flex-1 items-end justify-between text-sm">
+                                    <p className="text-gray-500">
+                                      Qty {item.quantity}
+                                    </p>
 
-                                      <div className="flex">
-                                        <button
-                                          type="button"
-                                          className="font-medium text-indigo-600 hover:text-indigo-500"
-                                        >
-                                          Remove
-                                        </button>
-                                      </div>
+                                    <div className="flex">
+                                      <button
+                                        onClick={() =>
+                                          props.handleRemoveCartItem(item.id)
+                                        }
+                                        type="button"
+                                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                                      >
+                                        Remove
+                                      </button>
                                     </div>
                                   </div>
-                                </li>
-                              </>
+                                </div>
+                              </li>
                             );
                           })}
                       </ul>

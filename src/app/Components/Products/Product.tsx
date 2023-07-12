@@ -1,29 +1,20 @@
 import React, { useMemo, useState } from "react";
+import { CategoryProps } from "@/app/page";
 import Image from "next/image";
-type ProductItems = {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-};
+
 type ProductProps = {
-  productItems: ProductItems | null;
+  productItems: CategoryProps | null;
   handleProductClose: () => void;
-  handleCartItem: (arg0: ProductItems | ProductItems[]) => void;
+  handleCartItem: (arg0: CategoryProps) => void;
 };
 
-const Product = (props: ProductProps) => {
+const Product: React.FC<ProductProps> = (props) => {
   const { productItems } = props;
   const rating = useMemo(
     () => Math.round(Number(productItems?.rating.rate)),
     [productItems?.rating.rate]
   );
+
   const svgs = [];
   const renderSvgUsingLoop = () => {
     const svgs = [];

@@ -7,7 +7,7 @@ import StoreNavigation from "./Components/Products/StoreNavigation";
 import Landing from "./Components/Header/Landing";
 import Product from "./Components/Products/Product";
 
-type CategoryProps = {
+export type CategoryProps = {
   id: number;
   title: string;
   price: number;
@@ -18,6 +18,8 @@ type CategoryProps = {
     rate: number;
     count: number;
   };
+  quantity: number;
+  totalPrice: number;
 };
 
 export default function Home() {
@@ -32,9 +34,7 @@ export default function Home() {
   const [productItems, setProductItems] = useState<CategoryProps | null>(null);
 
   // const [cartData, setCartData] = useState<string[]>([]);
-  const [cartItems, setCartItems] = useState<CategoryProps | CategoryProps[]>(
-    []
-  );
+  const [cartItems, setCartItems] = useState<CategoryProps[]>([]);
 
   const handleMenuOpen = () => {
     setMenuIsActive(true);
@@ -57,8 +57,57 @@ export default function Home() {
     setProductIsActive(false);
   };
 
-  const handleCartItem = (item: CategoryProps | CategoryProps[]) => {
-    setCartItems((prevItems: any) => [...prevItems, item]);
+  const handleCartItem = (item: CategoryProps) => {
+    if (Array.isArray(cartItems)) {
+      const existingItem = cartItems.find(
+        (cartItem) => cartItem.id === item.id
+      );
+
+      if (existingItem) {
+        const updatedItems = cartItems.map((cartItem) =>
+          cartItem.id === item.id
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + 1,
+                totalPrice: cartItem.totalPrice + cartItem.price,
+              }
+            : cartItem
+        );
+        setCartItems(updatedItems);
+        console.log(cartItems);
+      } else {
+        setCartItems((prevItems: any) => [
+          ...prevItems,
+          { ...item, quantity: 1, totalPrice: item.price },
+        ]);
+      }
+    }
+  };
+
+  const handleRemoveCartItem = (itemId: number) => {
+    if (Array.isArray(cartItems)) {
+      const updatedItems: CategoryProps[] = cartItems
+        .map((item: CategoryProps) => {
+          if (item.id === itemId) {
+            const updatedQuantity = item.quantity - 1;
+            const updatedTotalPrice = item.totalPrice - item.price;
+
+            if (updatedQuantity === 0) {
+              return null;
+            }
+
+            return {
+              ...item,
+              quantity: updatedQuantity,
+              totalPrice: updatedTotalPrice,
+            };
+          }
+          return item;
+        })
+        .filter((item) => item !== null) as CategoryProps[];
+
+      setCartItems(updatedItems);
+    }
   };
 
   useEffect(() => {
@@ -130,6 +179,7 @@ export default function Home() {
             categoryData={categoryData}
             handleActiveCategory={handleActiveCategory}
             cartItems={cartItems}
+            handleRemoveCartItem={handleRemoveCartItem}
           />
           {categoryIsActive ? (
             <StoreNavigation

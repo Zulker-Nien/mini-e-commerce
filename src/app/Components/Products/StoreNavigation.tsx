@@ -1,20 +1,8 @@
 import Image from "next/image";
-
-type CategoryItems = {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-};
+import { CategoryProps } from "@/app/page";
 
 type StoreProps = {
-  categoryItems: CategoryItems[];
+  categoryItems: CategoryProps[];
   handleProductClicked: (arg0: number) => void;
   handleProductClose: () => void;
 };
